@@ -10,12 +10,12 @@ let make = () => {
     | [] => <LinkList />
     | ["create"] => <CreateLink />
     // | ["login"] => <Auth />
-    | ["login"] => <Login />
+    | ["login"] => <Login2 />
     | _ => "NotFound"->React.string
     };
   ();
   <div className="center w85">
-    <Header />
+    <Header isLoggedIn=Token.isLoggedIn() />
     <div className="ph3 pv1 background-gray">
      nowShowing
     </div>

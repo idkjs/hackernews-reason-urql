@@ -1,5 +1,6 @@
 open ReasonUrql;
 
+
 [@react.component]
 let make = () => {
   // Used to switch between login and signup
@@ -10,39 +11,86 @@ let make = () => {
   let (name, setName) = React.useState(() => "");
   let loginRequest = Mutations.Login.make(~email, ~password, ());
   let signupRequest = Mutations.SignUp.make(~email, ~password, ~name, ());
-  let (stateL, executeLoginMutation) =
+  let (loginState, executeLoginMutation) =
     Hooks.useMutation(~request=loginRequest);
 
-  let (stateS, executeSignupMutation) =
+  let (signUpState, executeSignupMutation) =
     Hooks.useMutation(~request=signupRequest);
 
   let handle = (cb, event) => {
     let value = ReactEvent.Form.target(event)##value;
     cb(_ => value);
   };
-  let handleSignUp = (_executeMutation, _event) => {
+  let handleToken = token => {
+    Js.log2("TOKEN_DATA", token);
+    Token.setToken(token);
+    ReasonReactRouter.push("/");
+  };
+
+  let submitSignUp = () => {
+    executeSignupMutation()
+    |> response => {
+      Js.log2("submitSignUp",response)
+    }
+    |> _=> ReasonReactRouter.push("/");
+
+    // ReasonReactRouter.push("/");
+  };
+  let submitLogin2 = () => {
+    executeLoginMutation() |> ignore;
+    Js.Promise.then_(response => {
+        Js.log2("TOKEN_response", response);
+        let token = response##data##signup##token->Belt.Option.getExn;
+        handleToken(token)
+        Js.Promise.resolve();
+      })
+      |> ignore;
+    // ReasonReactRouter.push("/");
+  };
+  let submitLogin = () => {
+    executeLoginMutation()
+    |> response => {
+      Js.log2("submitLogin",response)
+      Js.log(response)
+    };
+    ReasonReactRouter.push("/");
+  };
+
+  let handleSignUp = _ => {
     executeSignupMutation() |> ignore;
-    Js.Promise.then_(data => {
-      Js.log2("TOKEN_DATA", data);
-      let token = data##signup##token->Belt.Option.getExn;
-      Token.setToken(token);
-      Js.log2("TOKEN_DATA", token);
+    Js.Promise.then_(signUpState => {
+      Js.log2("TOKEN_DATA", signUpState);
+      let token = signUpState##data##signup##token->Belt.Option.getExn;
+      // switch (data##signup##token) {
+      // | Some(token) => onChange(token)
+      // | None => ()
+      // };
+      // let token = data##signup##token->Belt.Option.getExn;
+      handleToken(token);
       Js.Promise.resolve();
     })
     |> ignore;
-    ReasonReactRouter.push("/");
   };
-  let handleLogin = (_executeMutation, _event) => {
+  let newSignUp = () => {
+    setEmail(_ => BsFaker.Internet.exampleEmail());
+    setPassword(_ => BsFaker.Internet.password());
+    setName(_ => BsFaker.Name.firstName());
+  };
+  let logAll = () => {
+    Js.log(name);
+    Js.log(email);
+    Js.log(password);
+  };
+
+  let handleLogin = _ => {
     executeLoginMutation() |> ignore;
     Js.Promise.then_(data => {
       Js.log2("TOKEN_DATA", data);
       let token = data##login##token->Belt.Option.getExn;
-      Token.setToken(token);
-      Js.log2("TOKEN_DATA", token);
+      handleToken(token);
       Js.Promise.resolve();
     })
     |> ignore;
-    ReasonReactRouter.push("/");
   };
   <div>
     <h4 className="mv3">
@@ -71,29 +119,28 @@ let make = () => {
       />
     </div>
     <div className="flex mt3">
-      {!isLogin
-         ? <button
-             type_="button"
-             className="pointer mr2 button"
-             disabled={stateS.fetching}
-             onClick={handleSignUp()}>
-             "signup"->React.string
-           </button>
-         : <button
-             type_="button"
-             className="pointer mr2 button"
-             disabled={stateL.fetching}
-             onClick={handleLogin()}>
-             "login"->React.string
-           </button>}
+      <button
+        type_="button"
+        className="pointer mr2 button"
+        disabled={loginState.fetching || signUpState.fetching}
+        onClick={_event => isLogin ? submitLogin2() : submitSignUp()}>
+        {isLogin ? "login"->React.string : "signup"->React.string}
+      </button>
       <button
         type_="button"
         className="pointer button"
-        disabled={stateS.fetching}
         onClick={_ => setIsLogin(isLogin => !isLogin)}>
         {isLogin
            ? "need to create an account?"->React.string
            : "already have an account?"->React.string}
+      </button>
+      <button
+        type_="button" className="pointer button" onClick={_ => newSignUp()}>
+        "generate Signup?"->React.string
+      </button>
+      <button
+        type_="button" className="pointer button" onClick={_ => logAll()}>
+        "Log New Signup?"->React.string
       </button>
     </div>
   </div>;

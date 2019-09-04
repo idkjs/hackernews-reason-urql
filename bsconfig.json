@@ -1,18 +1,27 @@
 {
   "name": "reason-scripts",
   "sources": [
-    {"dir":"src","subdirs":true}
+    {
+      "dir": "src",
+      "subdirs": true
+    }
   ],
   "warnings": {
     "error": "+5"
   },
-  "ppx-flags": ["graphql_ppx/ppx"],
+  "ppx-flags": [
+    "graphql_ppx/ppx"
+  ],
   "bs-dependencies": [
     "reason-react",
-    "@glennsl/bs-jest","reason-urql", "wonka"
+    "@glennsl/bs-jest",
+    "reason-urql",
+    "wonka",
+    "bs-faker"
   ],
   "bsc-flags": [
-    "-bs-super-errors","-bs-g"
+    "-bs-super-errors",
+    "-bs-g"
   ],
   "refmt": 3,
   "reason": {

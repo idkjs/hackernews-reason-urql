@@ -4,6 +4,8 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as Mutations from "../Mutations.bs.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
+import * as Name$BsFaker from "bs-faker/src/Name.bs.js";
+import * as Internet$BsFaker from "bs-faker/src/Internet.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 
 function Login(Props) {
@@ -33,7 +35,6 @@ function Login(Props) {
   var executeLoginMutation = match$4[1];
   var match$5 = Curry._1(ReasonUrql.Hooks[/* useMutation */0], signupRequest);
   var executeSignupMutation = match$5[1];
-  var stateS = match$5[0];
   var handle = function (cb, $$event) {
     var value = $$event.target.value;
     return Curry._1(cb, (function (param) {
@@ -41,7 +42,6 @@ function Login(Props) {
                 }));
   };
   var match$6 = !isLogin;
-  var match$7 = !isLogin;
   return React.createElement("div", undefined, React.createElement("h4", {
                   className: "mv3"
                 }, isLogin ? "Login" : "Sign Up"), React.createElement("div", {
@@ -69,32 +69,52 @@ function Login(Props) {
                         })
                     })), React.createElement("div", {
                   className: "flex mt3"
-                }, match$7 ? React.createElement("button", {
-                        className: "pointer mr2 button",
-                        disabled: stateS[/* fetching */0],
-                        type: "button",
-                        onClick: (function (param) {
-                            Curry._1(executeSignupMutation, /* () */0);
-                            return ReasonReactRouter.push("/");
-                          })
-                      }, "signup") : React.createElement("button", {
-                        className: "pointer mr2 button",
-                        disabled: match$4[0][/* fetching */0],
-                        type: "button",
-                        onClick: (function (param) {
+                }, React.createElement("button", {
+                      className: "pointer mr2 button",
+                      disabled: match$4[0][/* fetching */0] || match$5[0][/* fetching */0],
+                      type: "button",
+                      onClick: (function (_event) {
+                          if (isLogin) {
                             Curry._1(executeLoginMutation, /* () */0);
+                            return /* () */0;
+                          } else {
+                            var response = Curry._1(executeSignupMutation, /* () */0);
+                            console.log("submitSignUp", response);
                             return ReasonReactRouter.push("/");
-                          })
-                      }, "login"), React.createElement("button", {
+                          }
+                        })
+                    }, isLogin ? "login" : "signup"), React.createElement("button", {
                       className: "pointer button",
-                      disabled: stateS[/* fetching */0],
                       type: "button",
                       onClick: (function (param) {
                           return Curry._1(setIsLogin, (function (isLogin) {
                                         return !isLogin;
                                       }));
                         })
-                    }, isLogin ? "need to create an account?" : "already have an account?")));
+                    }, isLogin ? "need to create an account?" : "already have an account?"), React.createElement("button", {
+                      className: "pointer button",
+                      type: "button",
+                      onClick: (function (param) {
+                          Curry._1(setEmail, (function (param) {
+                                  return Internet$BsFaker.exampleEmail(undefined, undefined, /* () */0);
+                                }));
+                          Curry._1(setPassword, (function (param) {
+                                  return Internet$BsFaker.password(undefined, undefined, undefined, undefined, /* () */0);
+                                }));
+                          return Curry._1(setName, (function (param) {
+                                        return Name$BsFaker.firstName(undefined, /* () */0);
+                                      }));
+                        })
+                    }, "generate Signup?"), React.createElement("button", {
+                      className: "pointer button",
+                      type: "button",
+                      onClick: (function (param) {
+                          console.log(name);
+                          console.log(email);
+                          console.log(password);
+                          return /* () */0;
+                        })
+                    }, "Log New Signup?")));
 }
 
 var make = Login;
