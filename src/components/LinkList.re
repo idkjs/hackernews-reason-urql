@@ -9,6 +9,17 @@ module FEED_QUERY = [%graphql
         createdAt
         url
         description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
+
       }
     }}
 |}
