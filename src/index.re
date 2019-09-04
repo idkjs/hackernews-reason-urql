@@ -26,13 +26,32 @@ let debugExchange = exchangeInput => {
        );
 };
 
+let contextHandler = token => {
+  let headers = {
+    "headers": {
+      "Authorization": {j|Bearer $token|j},
+    },
+  };
+  headers;
+};
+
+let fetchOptions =
+  Fetch.RequestInit.make(
+    ~method_=Post,
+    ~headers=Fetch.HeadersInit.make(contextHandler(Token.getToken())),
+    (),
+  );
 let client =
   Client.make(
     ~url="http://localhost:4000",
+    ~fetchOptions=Client.FetchOpts(fetchOptions),
     ~exchanges=[|debugExchange, Exchanges.fetchExchange|],
     (),
   );
-ReactDOMRe.renderToElementWithId(<Provider value=client><App /></Provider>, "root");
+ReactDOMRe.renderToElementWithId(
+  <Provider value=client> <App /> </Provider>,
+  "root",
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister_service_worker() to register_service_worker() below. Note this

@@ -3,12 +3,16 @@
 import * as App from "./components/App.bs.js";
 import * as Urql from "urql";
 import * as Curry from "bs-platform/lib/es6/curry.js";
+import * as Fetch from "bs-fetch/src/Fetch.js";
+import * as Token from "./Token.bs.js";
 import * as Wonka from "wonka/src/wonka.js";
 import * as React from "react";
 import * as ReactDOMRe from "reason-react/src/ReactDOMRe.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
+import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as ServiceWorker from "./serviceWorker";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
+import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
 ((require('./styles/index.css')));
 
@@ -39,7 +43,17 @@ function debugExchange(exchangeInput) {
     });
 }
 
-var client = Curry._4(ReasonUrql.Client[/* make */3], "http://localhost:4000", undefined, /* array */[
+function contextHandler(token) {
+  return {
+          headers: {
+            Authorization: "Bearer " + (String(token) + "")
+          }
+        };
+}
+
+var fetchOptions = Fetch.RequestInit[/* make */0](/* Post */2, Caml_option.some(contextHandler(Token.getToken(/* () */0))), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(/* () */0);
+
+var client = Curry._4(ReasonUrql.Client[/* make */3], "http://localhost:4000", /* FetchOpts */Caml_chrome_debugger.variant("FetchOpts", 0, [fetchOptions]), /* array */[
       debugExchange,
       Urql.fetchExchange
     ], /* () */0);
@@ -55,6 +69,8 @@ export {
   register_service_worker ,
   unregister_service_worker ,
   debugExchange ,
+  contextHandler ,
+  fetchOptions ,
   client ,
   
 }

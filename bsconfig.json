@@ -17,7 +17,8 @@
     "@glennsl/bs-jest",
     "reason-urql",
     "wonka",
-    "bs-faker"
+    "bs-faker",
+    "bs-fetch"
   ],
   "bsc-flags": [
     "-bs-super-errors",

@@ -22,7 +22,7 @@ let make = (~isLoggedIn) => {
     Js.log2("HEADER: isLoggedIn:",isLoggedIn);
   <div className="flex pa1 justify-between nowrap orange">
     <div className="flex flex-fixed black">
-      <div className="fw7 mr1"> "Hacker News"->React.string </div>
+      <div className="fw7 mr1"> "Reason Hacker News"->React.string </div>
       <Link href="/" className="ml1 no-underline black">
         "new"->React.string
       </Link>

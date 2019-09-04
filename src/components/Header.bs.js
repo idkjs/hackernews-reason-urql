@@ -44,7 +44,7 @@ function Header(Props) {
                   className: "flex flex-fixed black"
                 }, React.createElement("div", {
                       className: "fw7 mr1"
-                    }, "Hacker News"), React.createElement(Header$Link, {
+                    }, "Reason Hacker News"), React.createElement(Header$Link, {
                       href: "/",
                       className: "ml1 no-underline black",
                       children: "new"
