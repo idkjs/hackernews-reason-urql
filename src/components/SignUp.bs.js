@@ -6,6 +6,8 @@ import * as React from "react";
 import * as Mutations from "../Mutations.bs.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
+import * as Name$BsFaker from "bs-faker/src/Name.bs.js";
+import * as Internet$BsFaker from "bs-faker/src/Internet.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
@@ -15,12 +17,14 @@ function reducer(state, action) {
               "remember",
               "email",
               "password",
+              "name",
               "error"
             ], [
               !state[/* remember */0],
               state[/* email */1],
               state[/* password */2],
-              state[/* error */3]
+              state[/* name */3],
+              state[/* error */4]
             ]);
   } else {
     switch (action.tag | 0) {
@@ -29,11 +33,13 @@ function reducer(state, action) {
                     "remember",
                     "email",
                     "password",
+                    "name",
                     "error"
                   ], [
                     state[/* remember */0],
                     state[/* email */1],
                     state[/* password */2],
+                    state[/* name */3],
                     action[0]
                   ]);
       case 1 : 
@@ -41,24 +47,42 @@ function reducer(state, action) {
                     "remember",
                     "email",
                     "password",
+                    "name",
                     "error"
                   ], [
                     state[/* remember */0],
                     action[0],
                     state[/* password */2],
-                    state[/* error */3]
+                    state[/* name */3],
+                    state[/* error */4]
                   ]);
       case 2 : 
           return /* record */Caml_chrome_debugger.record([
                     "remember",
                     "email",
                     "password",
+                    "name",
+                    "error"
+                  ], [
+                    state[/* remember */0],
+                    state[/* email */1],
+                    state[/* password */2],
+                    action[0],
+                    state[/* error */4]
+                  ]);
+      case 3 : 
+          return /* record */Caml_chrome_debugger.record([
+                    "remember",
+                    "email",
+                    "password",
+                    "name",
                     "error"
                   ], [
                     state[/* remember */0],
                     state[/* email */1],
                     action[0],
-                    state[/* error */3]
+                    state[/* name */3],
+                    state[/* error */4]
                   ]);
       
     }
@@ -73,44 +97,54 @@ function isFetching(param) {
   }
 }
 
-function Login(Props) {
+function SignUp(Props) {
   var match = React.useReducer(reducer, /* record */Caml_chrome_debugger.record([
           "remember",
           "email",
           "password",
+          "name",
           "error"
         ], [
           false,
+          "",
           "",
           "",
           undefined
         ]));
   var dispatch = match[1];
   var state = match[0];
-  var request = Mutations.Login[/* make */3](state[/* email */1], state[/* password */2], /* () */0);
+  var request = Mutations.SignUp[/* make */3](state[/* email */1], state[/* password */2], state[/* name */3], /* () */0);
   var match$1 = Curry._1(ReasonUrql.Hooks[/* useMutation */0], request);
-  var loginMutation = match$1[1];
-  var loginResponse = match$1[0];
+  var signupMutation = match$1[1];
+  var signupResponse = match$1[0];
   React.useEffect((function () {
-          var match = loginResponse[/* response */3];
+          var match = signupResponse[/* response */3];
           if (typeof match === "number") {
             match === 0;
           } else if (match.tag) {
-            Curry._1(dispatch, /* Error */Caml_chrome_debugger.variant("Error", 0, ["Invalid email and password combination"]));
+            Curry._1(dispatch, /* Error */Caml_chrome_debugger.variant("Error", 0, ["Combinação de email e senha invalidos"]));
           } else {
-            Belt_Option.map(match[0].login, (function (loginResp) {
-                    var token = Belt_Option.getExn(loginResp.token);
+            Belt_Option.map(match[0].signup, (function (signupResp) {
+                    var token = Belt_Option.getExn(signupResp.token);
                     Token.setToken(token);
                     return ReasonReactRouter.push("/");
                   }));
           }
           return undefined;
-        }), /* array */[loginResponse[/* response */3]]);
+        }), /* array */[signupResponse[/* response */3]]);
   return React.createElement("div", undefined, React.createElement("h4", {
                   className: "mv3"
                 }, "Login"), React.createElement("div", {
                   className: "flex flex-column"
                 }, React.createElement("input", {
+                      placeholder: "Your email address",
+                      type: "text",
+                      value: state[/* name */3],
+                      onChange: (function (e) {
+                          var name = e.currentTarget.value;
+                          return Curry._1(dispatch, /* SetName */Caml_chrome_debugger.variant("SetName", 2, [name]));
+                        })
+                    }), React.createElement("input", {
                       placeholder: "Your email address",
                       type: "text",
                       value: state[/* email */1],
@@ -124,29 +158,46 @@ function Login(Props) {
                       value: state[/* password */2],
                       onChange: (function (e) {
                           var password = e.currentTarget.value;
-                          return Curry._1(dispatch, /* SetPassword */Caml_chrome_debugger.variant("SetPassword", 2, [password]));
+                          return Curry._1(dispatch, /* SetPassword */Caml_chrome_debugger.variant("SetPassword", 3, [password]));
                         })
                     })), React.createElement("div", {
                   className: "flex mt3"
                 }, React.createElement("button", {
                       className: "pointer mr2 button",
-                      disabled: isFetching(loginResponse[/* response */3]),
+                      disabled: isFetching(signupResponse[/* response */3]),
                       type: "button",
                       onClick: (function (e) {
                           e.preventDefault();
-                          Curry._1(loginMutation, /* () */0);
+                          Curry._1(signupMutation, /* () */0);
                           return /* () */0;
                         })
-                    }, "login"), React.createElement("button", {
+                    }, "signup"), React.createElement("button", {
                       className: "pointer button",
                       type: "button",
                       onClick: (function (param) {
-                          return ReasonReactRouter.push("signup");
+                          return ReasonReactRouter.push("login");
                         })
-                    }, "need to create an account?")));
+                    }, "already have an account?"), React.createElement("button", {
+                      className: "pointer button",
+                      type: "button",
+                      onClick: (function (param) {
+                          Curry._1(dispatch, /* SetEmail */Caml_chrome_debugger.variant("SetEmail", 1, [Internet$BsFaker.exampleEmail(undefined, undefined, /* () */0)]));
+                          Curry._1(dispatch, /* SetPassword */Caml_chrome_debugger.variant("SetPassword", 3, [Internet$BsFaker.password(undefined, undefined, undefined, undefined, /* () */0)]));
+                          return Curry._1(dispatch, /* SetName */Caml_chrome_debugger.variant("SetName", 2, [Name$BsFaker.firstName(undefined, /* () */0)]));
+                        })
+                    }, "generate Signup?"), React.createElement("button", {
+                      className: "pointer button",
+                      type: "button",
+                      onClick: (function (param) {
+                          console.log(state[/* name */3]);
+                          console.log(state[/* email */1]);
+                          console.log(state[/* password */2]);
+                          return /* () */0;
+                        })
+                    }, "Log New Signup?")));
 }
 
-var make = Login;
+var make = SignUp;
 
 export {
   reducer ,

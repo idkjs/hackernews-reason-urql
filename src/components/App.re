@@ -9,8 +9,8 @@ let make = () => {
     switch (url.path) {
     | [] => <LinkList />
     | ["create"] => <CreateLink />
-    // | ["login"] => <Auth />
-    | ["login"] => <Login2 />
+    | ["signup"] => <SignUp />
+    | ["login"] => <Login />
     | _ => "NotFound"->React.string
     };
   ();
