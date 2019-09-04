@@ -1,0 +1,26 @@
+{
+  "name": "reason-scripts",
+  "sources": [
+    {"dir":"src","subdirs":true}
+  ],
+  "warnings": {
+    "error": "+5"
+  },
+  "ppx-flags": ["graphql_ppx/ppx"],
+  "bs-dependencies": [
+    "reason-react",
+    "@glennsl/bs-jest","reason-urql", "wonka"
+  ],
+  "bsc-flags": [
+    "-bs-super-errors","-bs-g"
+  ],
+  "refmt": 3,
+  "reason": {
+    "react-jsx": 3
+  },
+  "package-specs": {
+    "module": "es6",
+    "in-source": true
+  },
+  "suffix": ".bs.js"
+}

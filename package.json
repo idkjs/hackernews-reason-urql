@@ -1,0 +1,44 @@
+{
+  "name": "hackernews-reason-urql",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@glennsl/bs-jest": "0.4.9",
+    "@urql/exchange-graphcache": "1.0.0-rc.0",
+    "bs-platform": "5.0.6",
+    "cra-reason-template": "0.1.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "reason-react": "0.7.0",
+    "reason-urql": "1.0.0-beta.3",
+    "tachyons": "4.11.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "bs:make": "bsb -make-world",
+    "bs:watch": "bsb -make-world -w",
+    "bs:clean": "bsb -clean-world",
+    "get-schema": "yarn send-introspection-query http://localhost:4000/"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "graphql_ppx": "0.2.8"
+  }
+}
