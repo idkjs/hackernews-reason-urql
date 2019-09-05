@@ -23,14 +23,19 @@ function timeDifference(current, previous) {
   }
 }
 
-function timeDifferenceForDate(date) {
+function makeDate(date) {
+  return date.getTime();
+}
+
+function timeDifferenceForDate(createdAt) {
   var now = Date.now();
-  var updated = date.getTime();
+  var updated = createdAt.getTime();
   return timeDifference(now, updated);
 }
 
 export {
   timeDifference ,
+  makeDate ,
   timeDifferenceForDate ,
   
 }

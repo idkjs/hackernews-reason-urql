@@ -841,6 +841,11 @@
   dependencies:
     jest "^24.3.1"
 
+"@glennsl/bs-json@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-5.0.0.tgz#f5e3210d387f2e366c16954e560ee25712ca5a1b"
+  integrity sha512-YzTsMIeV4X7QfPMLMeoXEl2uaVOHG3SSjZNkhBHW/G4/I7jOBuJ0XKZeaQz4tv5EMRsLq/6Q6PtLGA6XGERJng==
+
 "@hapi/address@2.x.x":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.0.0.tgz#9f05469c88cb2fd3dcd624776b54ee95c312126a"

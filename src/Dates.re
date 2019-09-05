@@ -52,8 +52,9 @@ let timeDifference = (~current:float, ~previous:float) => {
   };
 };
 
-let timeDifferenceForDate = date => {
+let makeDate = date => Js.Date.(date |> getTime);
+let timeDifferenceForDate = (createdAt) => {
   let now = Js.Date.now();
-  let updated = Js.Date.getTime(date);
+  let updated = makeDate(createdAt);
   timeDifference(~current=now, ~previous=updated);
 };

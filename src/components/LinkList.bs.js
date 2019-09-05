@@ -9,6 +9,7 @@ import * as Js_json from "bs-platform/lib/es6/js_json.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
+import * as LinkDecoded from "./LinkDecoded.bs.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
 var ppx_printed_query = "query   {\nfeed  {\nlinks  {\nid  \ncreatedAt  \nurl  \ndescription  \npostedBy  {\nid  \nname  \n}\n\nvotes  {\nid  \nuser  {\nid  \n}\n\n}\n\n}\n\n}\n\n}\n";
@@ -242,13 +243,12 @@ function LinkList(Props) {
       return React.createElement("div", undefined, "No Network Error");
     }
   } else {
-    var data = response[0];
-    console.log("DATA", data.feed.links);
-    var linksToRender = data.feed.links;
-    var links = Belt_Array.map(linksToRender, (function (link) {
+    var linksToRender = LinkDecoded.decodeLinks(response[0].feed.links);
+    var links = Belt_Array.mapWithIndex(linksToRender, (function (index, link) {
             return React.createElement(Link.make, {
                         link: link,
-                        key: link.id
+                        index: index,
+                        key: String(index)
                       });
           }));
     return React.createElement("div", undefined, links);
