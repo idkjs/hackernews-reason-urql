@@ -8,7 +8,9 @@ function timeDifference(current, previous) {
   var milliSecondsPerMonth = milliSecondsPerDay * 30;
   var milliSecondsPerYear = milliSecondsPerDay * 365;
   var elapsed = current - previous;
-  if (elapsed < milliSecondsPerMinute) {
+  if (elapsed < milliSecondsPerMinute / 3) {
+    return "just now";
+  } else if (elapsed < milliSecondsPerMinute) {
     return "less than 1 min ago";
   } else if (elapsed < milliSecondsPerHour) {
     return Math.round(elapsed / milliSecondsPerMinute).toString() + " min ago";

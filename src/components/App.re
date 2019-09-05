@@ -11,6 +11,7 @@ let make = () => {
     | ["create"] => <CreateLink />
     | ["signup"] => <SignUp />
     | ["login"] => <Login />
+    | ["search"] => <Search />
     | _ => "NotFound"->React.string
     };
   ();

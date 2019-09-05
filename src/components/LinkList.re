@@ -35,7 +35,7 @@ let make = () => {
     let linksToRender = LinkDecoded.decodeLinks(data##feed##links);
     let links =
       linksToRender->Belt.Array.mapWithIndex((index, link) =>
-        <Link key={string_of_int(index)} link index />
+        <Link key={link.id} link index />
       );
     <div> {links |> React.array} </div>;
   | Fetching => <div> "Loading"->React.string </div>

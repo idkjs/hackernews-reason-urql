@@ -48,6 +48,12 @@ function Header(Props) {
                       href: "/",
                       className: "ml1 no-underline black",
                       children: "new"
+                    }), React.createElement("div", {
+                      className: "ml1"
+                    }, "|"), React.createElement(Header$Link, {
+                      href: "search",
+                      className: "ml1 no-underline black",
+                      children: "search"
                     }), isLoggedIn ? React.createElement("div", {
                         className: "flex"
                       }, React.createElement("div", {

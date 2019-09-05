@@ -4,6 +4,7 @@ import * as Login from "./Login.bs.js";
 import * as Token from "../Token.bs.js";
 import * as React from "react";
 import * as Header from "./Header.bs.js";
+import * as Search from "./Search.bs.js";
 import * as SignUp from "./SignUp.bs.js";
 import * as LinkList from "./LinkList.bs.js";
 import * as CreateLink from "./CreateLink.bs.js";
@@ -22,6 +23,9 @@ function App(Props) {
           break;
       case "login" : 
           nowShowing = match[1] ? "NotFound" : React.createElement(Login.make, { });
+          break;
+      case "search" : 
+          nowShowing = match[1] ? "NotFound" : React.createElement(Search.make, { });
           break;
       case "signup" : 
           nowShowing = match[1] ? "NotFound" : React.createElement(SignUp.make, { });

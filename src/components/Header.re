@@ -26,6 +26,11 @@ let make = (~isLoggedIn) => {
       <Link href="/" className="ml1 no-underline black">
         "new"->React.string
       </Link>
+          <div className="ml1">"|" ->React.string</div>
+    <Link href="search" className="ml1 no-underline black">
+        "search" ->React.string
+    </Link>
+
       {isLoggedIn ?
           <div className="flex">
             <div className="ml1"> "|" ->React.string</div>

@@ -43,17 +43,22 @@ function debugExchange(exchangeInput) {
     });
 }
 
-function contextHandler(token) {
-  return {
-          headers: {
-            Authorization: "Bearer " + (String(token) + "")
-          }
-        };
+function headerContextLink(token) {
+  console.log("headerContextLink_token: ", token);
+  var contextHandler = function (x) {
+    return {
+            headers: {
+              Authorization: "Bearer " + (String(x) + "")
+            }
+          };
+  };
+  var fetchOptions = Fetch.RequestInit[/* make */0](/* Post */2, Caml_option.some(contextHandler(token)), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(/* () */0);
+  return /* FetchOpts */Caml_chrome_debugger.variant("FetchOpts", 0, [fetchOptions]);
 }
 
-var fetchOptions = Fetch.RequestInit[/* make */0](/* Post */2, Caml_option.some(contextHandler(Token.getToken(/* () */0))), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(/* () */0);
+console.log("headerContextLink: ", headerContextLink(Token.getToken(/* () */0)));
 
-var client = Curry._4(ReasonUrql.Client[/* make */3], "http://localhost:4000", /* FetchOpts */Caml_chrome_debugger.variant("FetchOpts", 0, [fetchOptions]), /* array */[
+var client = Curry._4(ReasonUrql.Client[/* make */3], "http://localhost:4000", headerContextLink(Token.getToken(/* () */0)), /* array */[
       debugExchange,
       Urql.fetchExchange
     ], /* () */0);
@@ -69,8 +74,7 @@ export {
   register_service_worker ,
   unregister_service_worker ,
   debugExchange ,
-  contextHandler ,
-  fetchOptions ,
+  headerContextLink ,
   client ,
   
 }
