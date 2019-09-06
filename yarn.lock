@@ -1325,15 +1325,21 @@
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
-"@urql/exchange-graphcache@1.0.0-rc.0":
-  version "1.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-1.0.0-rc.0.tgz#4456546abe669914a0d577d599ed8b708e3a1805"
-  integrity sha512-s7Ge+M0WQmunz/GKqqiUw7UdBfXlHbODF8mC03O8HWqyzgu6WlMAVFPoxNMX1Jl5cFWUL2xBM0ah23erDyl/+A==
+"@urql/devtools@0.1.0-beta.1":
+  version "0.1.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@urql/devtools/-/devtools-0.1.0-beta.1.tgz#327d662b37295a386dcccef4b31931363d4cce82"
+  integrity sha512-IWdspcEnkJbXH8eLkwvBUmlR2PfepmPdrJqgDaq2rPwN1aKIldx5IcYYvFCVIzdRA8QkDRx++OhY5CSD/HhBeQ==
+  dependencies:
+    wonka "^3.2.1"
+
+"@urql/exchange-graphcache@1.0.0-rc.3":
+  version "1.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-1.0.0-rc.3.tgz#0092df3eec366dc0f37583700ba331cf7a5f3744"
+  integrity sha512-LHIML7nmXYqKzx3lFvUSW9YzGygsYjOlzIA5R87+IBTwSQjACHb2mWhm35Ex9m1Sl3sgSIljXiqBwKv1KdVUsg==
   dependencies:
     fast-json-stable-stringify "^2.0.0"
     pessimism "^1.1.1"
     tiny-invariant "^1.0.6"
-    warning "^4.0.3"
     wonka "^3.2.1"
 
 "@webassemblyjs/ast@1.8.5":
@@ -9880,13 +9886,6 @@ walker@^1.0.7, walker@~1.0.5:
   integrity sha1-L3+bj9ENZ3JisYqITijRlhjgKPs=
   dependencies:
     makeerror "1.0.x"
-
-warning@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
-  integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
-  dependencies:
-    loose-envify "^1.0.0"
 
 watchpack@^1.5.0:
   version "1.6.0"

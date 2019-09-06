@@ -12,7 +12,7 @@ import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as LinkDecoded from "./LinkDecoded.bs.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
-var ppx_printed_query = "query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput)  {\nfeed(first: $first, skip: $skip, orderBy: $orderBy)  {\ncount  \nlinks  {\nid  \ncreatedAt  \nurl  \ndescription  \npostedBy  {\nid  \nname  \n}\n\nvotes  {\nid  \nuser  {\nid  \n}\n\n}\n\n}\n\n}\n\n}\n";
+var ppx_printed_query = "query FeedSearchQuery($filter: String!)  {\nfeed(filter: $filter)  {\nlinks  {\nid  \nurl  \ndescription  \ncreatedAt  \npostedBy  {\nid  \nname  \n}\n\nvotes  {\nid  \nuser  {\nid  \n}\n\n}\n\n}\n\n}\n\n}\n";
 
 function parse(value) {
   var match = Js_json.decodeObject(value);
@@ -22,22 +22,12 @@ function parse(value) {
     if (match$1 !== undefined) {
       var match$2 = Js_json.decodeObject(Caml_option.valFromOption(match$1));
       if (match$2 !== undefined) {
-        var value$1 = Caml_option.valFromOption(match$2);
-        var match$3 = Js_dict.get(value$1, "count");
+        var match$3 = Js_dict.get(Caml_option.valFromOption(match$2), "links");
         var tmp$1;
         if (match$3 !== undefined) {
-          var value$2 = Caml_option.valFromOption(match$3);
-          var match$4 = Js_json.decodeNumber(value$2);
-          tmp$1 = match$4 !== undefined ? match$4 | 0 : Js_exn.raiseError("graphql_ppx: Expected int, got " + JSON.stringify(value$2));
-        } else {
-          tmp$1 = Js_exn.raiseError("graphql_ppx: Field count on type Feed is missing");
-        }
-        var match$5 = Js_dict.get(value$1, "links");
-        var tmp$2;
-        if (match$5 !== undefined) {
-          var value$3 = Caml_option.valFromOption(match$5);
-          var match$6 = Js_json.decodeArray(value$3);
-          tmp$2 = match$6 !== undefined ? match$6.map((function (value) {
+          var value$1 = Caml_option.valFromOption(match$3);
+          var match$4 = Js_json.decodeArray(value$1);
+          tmp$1 = match$4 !== undefined ? match$4.map((function (value) {
                     var match = Js_json.decodeObject(value);
                     if (match !== undefined) {
                       var value$1 = Caml_option.valFromOption(match);
@@ -50,25 +40,25 @@ function parse(value) {
                       } else {
                         tmp = Js_exn.raiseError("graphql_ppx: Field id on type Link is missing");
                       }
-                      var match$3 = Js_dict.get(value$1, "createdAt");
-                      var match$4 = Js_dict.get(value$1, "url");
+                      var match$3 = Js_dict.get(value$1, "url");
                       var tmp$1;
-                      if (match$4 !== undefined) {
-                        var value$3 = Caml_option.valFromOption(match$4);
-                        var match$5 = Js_json.decodeString(value$3);
-                        tmp$1 = match$5 !== undefined ? match$5 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value$3));
+                      if (match$3 !== undefined) {
+                        var value$3 = Caml_option.valFromOption(match$3);
+                        var match$4 = Js_json.decodeString(value$3);
+                        tmp$1 = match$4 !== undefined ? match$4 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value$3));
                       } else {
                         tmp$1 = Js_exn.raiseError("graphql_ppx: Field url on type Link is missing");
                       }
-                      var match$6 = Js_dict.get(value$1, "description");
+                      var match$5 = Js_dict.get(value$1, "description");
                       var tmp$2;
-                      if (match$6 !== undefined) {
-                        var value$4 = Caml_option.valFromOption(match$6);
-                        var match$7 = Js_json.decodeString(value$4);
-                        tmp$2 = match$7 !== undefined ? match$7 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value$4));
+                      if (match$5 !== undefined) {
+                        var value$4 = Caml_option.valFromOption(match$5);
+                        var match$6 = Js_json.decodeString(value$4);
+                        tmp$2 = match$6 !== undefined ? match$6 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value$4));
                       } else {
                         tmp$2 = Js_exn.raiseError("graphql_ppx: Field description on type Link is missing");
                       }
+                      var match$7 = Js_dict.get(value$1, "createdAt");
                       var match$8 = Js_dict.get(value$1, "postedBy");
                       var tmp$3;
                       if (match$8 !== undefined) {
@@ -165,22 +155,21 @@ function parse(value) {
                       }
                       return {
                               id: tmp,
-                              createdAt: match$3 !== undefined ? Caml_option.valFromOption(match$3) : Js_exn.raiseError("graphql_ppx: Field createdAt on type Link is missing"),
                               url: tmp$1,
                               description: tmp$2,
+                              createdAt: match$7 !== undefined ? Caml_option.valFromOption(match$7) : Js_exn.raiseError("graphql_ppx: Field createdAt on type Link is missing"),
                               postedBy: tmp$3,
                               votes: tmp$7
                             };
                     } else {
                       return Js_exn.raiseError("graphql_ppx: Object is not a value");
                     }
-                  })) : Js_exn.raiseError("graphql_ppx: Expected array, got " + JSON.stringify(value$3));
+                  })) : Js_exn.raiseError("graphql_ppx: Expected array, got " + JSON.stringify(value$1));
         } else {
-          tmp$2 = Js_exn.raiseError("graphql_ppx: Field links on type Feed is missing");
+          tmp$1 = Js_exn.raiseError("graphql_ppx: Field links on type Feed is missing");
         }
         tmp = {
-          count: tmp$1,
-          links: tmp$2
+          links: tmp$1
         };
       } else {
         tmp = Js_exn.raiseError("graphql_ppx: Object is not a value");
@@ -196,67 +185,25 @@ function parse(value) {
   }
 }
 
-function json_of_LinkOrderByInput(value) {
-  if (value >= 550411093) {
-    if (value >= 929055841) {
-      if (value >= 1043863310) {
-        return "description_ASC";
-      } else {
-        return "url_DESC";
-      }
-    } else if (value >= 885860276) {
-      return "description_DESC";
-    } else {
-      return "createdAt_DESC";
-    }
-  } else if (value >= 71429889) {
-    return "url_ASC";
-  } else {
-    return "createdAt_ASC";
-  }
-}
-
-function make(first, skip, orderBy, param) {
+function make(filter, param) {
   return {
           query: ppx_printed_query,
-          variables: Js_dict.fromArray(/* array */[
-                /* tuple */[
-                  "first",
-                  first !== undefined ? first : null
-                ],
-                /* tuple */[
-                  "skip",
-                  skip !== undefined ? skip : null
-                ],
-                /* tuple */[
-                  "orderBy",
-                  orderBy !== undefined ? json_of_LinkOrderByInput(orderBy) : null
-                ]
-              ]),
+          variables: Js_dict.fromArray(/* array */[/* tuple */[
+                  "filter",
+                  filter
+                ]]),
           parse: parse
         };
 }
 
 function makeWithVariables(variables) {
-  var first = variables.first;
-  var skip = variables.skip;
-  var orderBy = variables.orderBy;
+  var filter = variables.filter;
   return {
           query: ppx_printed_query,
-          variables: Js_dict.fromArray(/* array */[
-                /* tuple */[
-                  "first",
-                  first !== undefined ? first : null
-                ],
-                /* tuple */[
-                  "skip",
-                  skip !== undefined ? skip : null
-                ],
-                /* tuple */[
-                  "orderBy",
-                  orderBy !== undefined ? json_of_LinkOrderByInput(orderBy) : null
-                ]
-              ]),
+          variables: Js_dict.fromArray(/* array */[/* tuple */[
+                  "filter",
+                  filter
+                ]]),
           parse: parse
         };
 }
@@ -267,11 +214,10 @@ function ret_type(f) {
 
 var MT_Ret = /* module */Caml_chrome_debugger.localModule([], []);
 
-var FEED_QUERY = /* module */Caml_chrome_debugger.localModule([
+var FEED_SEARCH_QUERY = /* module */Caml_chrome_debugger.localModule([
     "ppx_printed_query",
     "query",
     "parse",
-    "json_of_LinkOrderByInput",
     "make",
     "makeWithVariables",
     "ret_type",
@@ -280,47 +226,52 @@ var FEED_QUERY = /* module */Caml_chrome_debugger.localModule([
     ppx_printed_query,
     ppx_printed_query,
     parse,
-    json_of_LinkOrderByInput,
     make,
     makeWithVariables,
     ret_type,
     MT_Ret
   ]);
 
-function LinkList(Props) {
-  var request = make(undefined, undefined, undefined, /* () */0);
-  var match = Curry._4(ReasonUrql.Hooks[/* useQuery */1], request, undefined, undefined, /* () */0);
-  var response = match[0][/* response */3];
-  if (typeof response === "number") {
-    if (response === 0) {
-      return React.createElement("div", undefined, "Loading");
-    } else {
-      return React.createElement("div", undefined, "Not Found");
-    }
-  } else if (response.tag) {
-    var match$1 = response[0][/* networkError */0];
-    if (match$1 !== undefined) {
-      return React.createElement("div", undefined, "Network Error");
-    } else {
-      return React.createElement("div", undefined, "No Network Error");
-    }
-  } else {
-    var linksToRender = LinkDecoded.decodeLinks(response[0].feed.links);
-    var links = Belt_Array.mapWithIndex(linksToRender, (function (index, link) {
-            return React.createElement(Link.make, {
-                        link: link,
-                        index: index,
-                        key: link[/* id */0]
-                      });
-          }));
-    return React.createElement("div", undefined, links);
-  }
+function Search2(Props) {
+  var match = React.useState((function () {
+          return "";
+        }));
+  var setFilter = match[1];
+  var request = make(match[0], /* () */0);
+  var match$1 = Curry._4(ReasonUrql.Hooks[/* useQuery */1], request, /* NetworkOnly */971373850, true, /* () */0);
+  var executeQuery = match$1[1];
+  Curry._1(React.useCallback((function (param) {
+              return executeQuery;
+            })), /* () */0);
+  var refetch = React.useCallback((function (param) {
+          return Curry._1(executeQuery, undefined);
+        }));
+  var match$2 = match$1[0][/* data */1];
+  var links = match$2 !== undefined ? Caml_option.valFromOption(match$2).feed.links : /* array */[];
+  var linksToRender = LinkDecoded.decodeLinks(links);
+  var links$1 = Belt_Array.mapWithIndex(linksToRender, (function (index, link) {
+          return React.createElement(Link.make, {
+                      link: link,
+                      index: index,
+                      key: link[/* id */0]
+                    });
+        }));
+  return React.createElement("div", undefined, React.createElement("div", undefined, "Search", React.createElement("input", {
+                      type: "text",
+                      onChange: (function (e) {
+                          return Curry._1(setFilter, e.currentTarget.value);
+                        })
+                    })), React.createElement("button", {
+                  onClick: (function (_e) {
+                      return Curry._1(refetch, /* () */0);
+                    })
+                }, "search"), React.createElement("div", undefined, links$1));
 }
 
-var make$1 = LinkList;
+var make$1 = Search2;
 
 export {
-  FEED_QUERY ,
+  FEED_SEARCH_QUERY ,
   make$1 as make,
   
 }

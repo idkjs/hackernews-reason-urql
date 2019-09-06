@@ -6,6 +6,7 @@ external register_service_worker: unit => unit = "register";
 [@bs.module "./serviceWorker"]
 external unregister_service_worker: unit => unit = "unregister";
 open ReasonUrql;
+open UrqlDevtools;
 open Fetch;
 ReasonReactRouter.push("");
 
@@ -27,44 +28,31 @@ let debugExchange = exchangeInput => {
        );
 };
 
-let headerContextLink = token => {
-  Js.log2("headerContextLink_token: ",token);
-  let contextHandler = x => {
-    let headers = {
-      "headers": {
-        "Authorization": {j|Bearer $x|j}
-      }
-    };
-    headers;
-  };
-  let fetchOptions = Fetch.RequestInit.make(
-    ~method_=Post,
-    ~headers=Fetch.HeadersInit.make(contextHandler(token)),
-    (),
-  );
+let headerContextLink = {
+  let token = Token.getToken();
+  let headers = {"Authorization": {j|Bearer $token|j}};
+
+  let fetchOptions =
+    Fetch.RequestInit.make(
+      ~method_=Post,
+      ~headers=Fetch.HeadersInit.make(headers),
+      (),
+    );
   // Return the function that gets passed to `fetchOptions` in `Client.make`
-  Client.FetchOpts(fetchOptions)
+  Client.FetchOpts(fetchOptions);
 };
-// let contextHandler = token => {
-//   let headers = {
-//     "headers": {
-//       "Authorization": {j|Bearer $token|j},
-//     },
-//   };
-//   headers;
-// };
-Js.log2("headerContextLink: ",headerContextLink(Token.getToken()));
-// let fetchOptions =
-//   Fetch.RequestInit.make(
-//     ~method_=Post,
-//     ~headers=Fetch.HeadersInit.make(contextHandler(Token.getToken())),
-//     (),
-//   );
+
+let cache = GraphCache.cacheExchange();
 let client =
   Client.make(
     ~url="http://localhost:4000",
-    ~fetchOptions=headerContextLink(Token.getToken()),
-    ~exchanges=[|debugExchange, Exchanges.fetchExchange|],
+    ~fetchOptions=headerContextLink,
+    ~exchanges=[|
+      debugExchange,
+      cache(~opts=None),
+      devtoolsExchange,
+      Exchanges.fetchExchange,
+    |],
     (),
   );
 ReactDOMRe.renderToElementWithId(

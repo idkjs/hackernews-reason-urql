@@ -1,6 +1,5 @@
 // [@bs.module] external css: Js.t({..}) as 'a = "../styles/App.module.css";
 [%bs.raw {|require('../styles/App.css')|}];
-
 [@react.component]
 let make = () => {
   let url = ReasonReactRouter.useUrl();
@@ -8,6 +7,7 @@ let make = () => {
   let nowShowing =
     switch (url.path) {
     | [] => <LinkList />
+    | ["new","1"] => <LinkList />
     | ["create"] => <CreateLink />
     | ["signup"] => <SignUp />
     | ["login"] => <Login />
@@ -16,7 +16,7 @@ let make = () => {
     };
   ();
   <div className="center w85">
-    <Header isLoggedIn=Token.isLoggedIn() />
+    <Header />
     <div className="ph3 pv1 background-gray">
      nowShowing
     </div>

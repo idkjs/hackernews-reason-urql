@@ -10,9 +10,11 @@ import * as React from "react";
 import * as ReactDOMRe from "reason-react/src/ReactDOMRe.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
+import * as Devtools from "@urql/devtools";
 import * as ServiceWorker from "./serviceWorker";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
+import * as CacheExchange from "@urql/exchange-graphcache";
 
 ((require('./styles/index.css')));
 
@@ -43,23 +45,24 @@ function debugExchange(exchangeInput) {
     });
 }
 
-function headerContextLink(token) {
-  console.log("headerContextLink_token: ", token);
-  var contextHandler = function (x) {
-    return {
-            headers: {
-              Authorization: "Bearer " + (String(x) + "")
-            }
-          };
-  };
-  var fetchOptions = Fetch.RequestInit[/* make */0](/* Post */2, Caml_option.some(contextHandler(token)), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(/* () */0);
-  return /* FetchOpts */Caml_chrome_debugger.variant("FetchOpts", 0, [fetchOptions]);
+var token = Token.getToken(/* () */0);
+
+var headers = {
+  Authorization: "Bearer " + (String(token) + "")
+};
+
+var fetchOptions = Fetch.RequestInit[/* make */0](/* Post */2, Caml_option.some(headers), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(/* () */0);
+
+var headerContextLink = /* FetchOpts */Caml_chrome_debugger.variant("FetchOpts", 0, [fetchOptions]);
+
+function cache(param) {
+  return CacheExchange.cacheExchange(param);
 }
 
-console.log("headerContextLink: ", headerContextLink(Token.getToken(/* () */0)));
-
-var client = Curry._4(ReasonUrql.Client[/* make */3], "http://localhost:4000", headerContextLink(Token.getToken(/* () */0)), /* array */[
+var client = Curry._4(ReasonUrql.Client[/* make */3], "http://localhost:4000", headerContextLink, /* array */[
       debugExchange,
+      CacheExchange.cacheExchange(undefined),
+      Devtools.devtoolsExchange,
       Urql.fetchExchange
     ], /* () */0);
 
@@ -75,6 +78,7 @@ export {
   unregister_service_worker ,
   debugExchange ,
   headerContextLink ,
+  cache ,
   client ,
   
 }

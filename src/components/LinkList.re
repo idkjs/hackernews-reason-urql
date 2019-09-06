@@ -3,7 +3,9 @@ open Hooks;
 
 module FEED_QUERY = [%graphql
   {|
-    {feed {
+    query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
+    feed(first: $first, skip: $skip, orderBy: $orderBy) {
+      count
       links {
         id
         createdAt

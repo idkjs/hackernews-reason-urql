@@ -2,7 +2,6 @@
 
 import * as Token from "../Token.bs.js";
 import * as React from "react";
-import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
@@ -34,10 +33,7 @@ var Link = /* module */Caml_chrome_debugger.localModule([
   ]);
 
 function Header(Props) {
-  var isLoggedIn = Props.isLoggedIn;
-  console.log("TOKEN:", Belt_Option.getWithDefault(Token.getToken(/* () */0), "NO_TOKEN"));
-  console.log("isLoggedIn:", isLoggedIn);
-  console.log("HEADER: isLoggedIn:", isLoggedIn);
+  var isLoggedIn = Token.isLoggedIn(/* () */0);
   return React.createElement("div", {
               className: "flex pa1 justify-between nowrap orange"
             }, React.createElement("div", {
@@ -48,6 +44,10 @@ function Header(Props) {
                       href: "/",
                       className: "ml1 no-underline black",
                       children: "new"
+                    }), React.createElement(Header$Link, {
+                      href: "top",
+                      className: "ml1 no-underline black",
+                      children: "top"
                     }), React.createElement("div", {
                       className: "ml1"
                     }, "|"), React.createElement(Header$Link, {
