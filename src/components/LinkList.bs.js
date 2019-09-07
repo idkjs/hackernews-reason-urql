@@ -17,6 +17,10 @@ import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 import * as LinkDecoded$ReasonHn from "./LinkDecoded.bs.js";
 
+function $$parseInt$1(string) {
+  return parseInt(string, 10);
+}
+
 var ppx_printed_query = "query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput)  {\nfeed(first: $first, skip: $skip, orderBy: $orderBy)  {\ncount  \nlinks  {\nid  \ncreatedAt  \nurl  \ndescription  \npostedBy  {\nid  \nname  \n}\n\nvotes  {\nid  \nuser  {\nid  \n}\n\n}\n\n}\n\n}\n\n}\n";
 
 function parse(value) {
@@ -309,20 +313,6 @@ function LinkList(Props) {
   var first = isNewPage ? 10 : 100;
   console.log("first", first);
   console.log("orderBy", /* createdAt_DESC */550411093);
-  var firstPL = isNewPage ? 10 : 100;
-  console.log("firstPL", firstPL);
-  var skipPL = isNewPage ? Caml_int32.imul(Caml_format.caml_int_of_string(List.nth(path, 1)) - 1 | 0, 10) : 0;
-  console.log("skipPL", skipPL);
-  var orderByPL = isNewPage ? "createdAt_DESC" : "";
-  console.log("orderByPL", orderByPL);
-  var payload = React.useMemo((function () {
-          var variables = { };
-          variables["skip"] = skipPL;
-          variables["first"] = firstPL;
-          variables["orderBy"] = orderByPL;
-          return variables;
-        }), /* array */[path]);
-  console.log("payload", payload);
   var request = make(first, skip, /* createdAt_DESC */550411093, /* () */0);
   var match$1 = Curry._4(ReasonUrql.Hooks[/* useQuery */1], request, undefined, undefined, /* () */0);
   var response = match$1[0][/* response */3];
@@ -346,7 +336,7 @@ function LinkList(Props) {
     var links = Belt_Array.mapWithIndex(linksToRender, (function (index, link) {
             return React.createElement(Link$ReasonHn.make, {
                         link: link,
-                        index: index,
+                        index: skip + index | 0,
                         key: link[/* id */0]
                       });
           }));
@@ -357,6 +347,7 @@ function LinkList(Props) {
 var make$1 = LinkList;
 
 export {
+  $$parseInt$1 as $$parseInt,
   FEED_QUERY ,
   make$1 as make,
   

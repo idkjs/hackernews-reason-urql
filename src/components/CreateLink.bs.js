@@ -7,6 +7,8 @@ import * as Js_dict from "bs-platform/lib/es6/js_dict.js";
 import * as Js_json from "bs-platform/lib/es6/js_json.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
+import * as Hacker$BsFaker from "bs-faker/src/Hacker.bs.js";
+import * as Internet$BsFaker from "bs-faker/src/Internet.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
@@ -239,11 +241,17 @@ function CreateLink(Props) {
   var request = make(description, url, /* () */0);
   var match$2 = Curry._1(ReasonUrql.Hooks[/* useMutation */0], request);
   var executeMutation = match$2[1];
+  var state = match$2[0];
   var handle = function (cb, $$event) {
     var value = $$event.target.value;
     return Curry._1(cb, (function (param) {
                   return value;
                 }));
+  };
+  var logAll = function (param) {
+    console.log(url);
+    console.log(description);
+    return /* () */0;
   };
   return React.createElement("div", undefined, React.createElement("div", {
                   className: "flex flex-column mt3"
@@ -264,7 +272,7 @@ function CreateLink(Props) {
                           return handle(setUrl, param);
                         })
                     })), React.createElement("button", {
-                  disabled: match$2[0][/* fetching */0],
+                  disabled: state[/* fetching */0],
                   onClick: (function (param) {
                       Curry._1(executeMutation, /* () */0);
                       Curry._1(setDescription, (function (param) {
@@ -275,7 +283,20 @@ function CreateLink(Props) {
                             }));
                       return ReasonReactRouter.push("/");
                     })
-                }, "Submit"));
+                }, "Submit"), React.createElement("button", {
+                  disabled: state[/* fetching */0],
+                  onClick: (function (param) {
+                      Curry._1(setDescription, (function (param) {
+                              return Hacker$BsFaker.phrase(/* () */0);
+                            }));
+                      Curry._1(setUrl, (function (param) {
+                              return Internet$BsFaker.url(/* () */0);
+                            }));
+                      logAll(/* () */0);
+                      Curry._1(executeMutation, /* () */0);
+                      return /* () */0;
+                    })
+                }, "createNewLink"));
 }
 
 var make$1 = CreateLink;

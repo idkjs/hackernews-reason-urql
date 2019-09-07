@@ -24,7 +24,6 @@ module POST_MUTATION = [%graphql
 |}
 ];
 
-
 [@react.component]
 let make = () => {
   let (description, setDescription) = React.useState(() => "");
@@ -43,6 +42,20 @@ let make = () => {
     setUrl(_ => "");
     ReasonReactRouter.push("/");
   };
+  let logAll = () => {
+    Js.log(url);
+    Js.log(description);
+  };
+  let delay = fn => Js.Global.setTimeout(() => fn(), 3000) |> ignore;
+
+  let createNewLink = () => {
+    // Js.log(i);
+    setDescription(_ => BsFaker.Hacker.phrase());
+    setUrl(_ => BsFaker.Internet.url());
+    logAll();
+    executeMutation() |> ignore;
+  };
+
   <div>
     <div className="flex flex-column mt3">
       <input
@@ -62,6 +75,9 @@ let make = () => {
     </div>
     <button disabled={state.fetching} onClick={_ => submit()}>
       "Submit"->React.string
+    </button>
+    <button disabled={state.fetching} onClick={_ => createNewLink()}>
+      "createNewLink"->React.string
     </button>
   </div>;
 };

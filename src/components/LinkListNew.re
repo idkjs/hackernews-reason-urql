@@ -32,8 +32,10 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
   // Get the first string in the list and check if it exists with `Belt.List.head`
   // Belt.List.head xs returns None if xs is the empty list, otherwise it returns Some value where value is the first element in the list.
   // see:https://bucklescript.github.io/bucklescript/api/Belt.List.html#VALheadExn
-
-  let pageWithArg = list => list->List.nth(1)->int_of_string;
+let pageWithArg = list => list->List.nth(1)->Utils.parseInt;
+  Js.log2("parseInt", pageWithArg(path));
+  // let pageWithArg = list => list->List.nth(1)->int_of_string;
+  Js.log2("pageWithArg", pageWithArg(path));
   let isNewPage = path->Belt.List.has("new", (===)) == true;
 
   Js.log2("isNewPage", isNewPage);

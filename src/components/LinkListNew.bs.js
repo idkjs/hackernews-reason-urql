@@ -7,8 +7,8 @@ import * as Belt_List from "bs-platform/lib/es6/belt_List.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Caml_int32 from "bs-platform/lib/es6/caml_int32.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
-import * as Caml_format from "bs-platform/lib/es6/caml_format.js";
 import * as Link$ReasonHn from "./Link.bs.js";
+import * as Utils$ReasonHn from "../Utils.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as LinkDecoded$ReasonHn from "./LinkDecoded.bs.js";
 
@@ -18,11 +18,13 @@ function LinkListNew(Props) {
   var match = Props.path;
   var path = match !== undefined ? match : ReasonReactRouter.useUrl(undefined, /* () */0)[/* path */0];
   console.log("path", path);
+  console.log("parseInt", Utils$ReasonHn.$$parseInt(List.nth(path, 1)));
+  console.log("pageWithArg", Utils$ReasonHn.$$parseInt(List.nth(path, 1)));
   var isNewPage = Belt_List.has(path, "new", (function (prim, prim$1) {
           return prim === prim$1;
         })) === true;
   console.log("isNewPage", isNewPage);
-  var skip = isNewPage ? Caml_int32.imul(Caml_format.caml_int_of_string(List.nth(path, 1)) - 1 | 0, 10) : 0;
+  var skip = isNewPage ? Caml_int32.imul(Utils$ReasonHn.$$parseInt(List.nth(path, 1)) - 1 | 0, 10) : 0;
   console.log("skip", skip);
   var first = isNewPage ? 10 : 100;
   console.log("first", first);

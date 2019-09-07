@@ -20,7 +20,7 @@ let make = () => {
         "new"->React.string
       </Link>
       <div className="ml1"> "|"->React.string </div>
-      <Link href="new/1" className="ml1 no-underline black">
+      <Link href="/new/1" className="ml1 no-underline black">
         "top"->React.string
       </Link>
       <div className="ml1"> "|"->React.string </div>

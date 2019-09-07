@@ -47,7 +47,7 @@ function Header(Props) {
                     }), React.createElement("div", {
                       className: "ml1"
                     }, "|"), React.createElement(Header$Link, {
-                      href: "new/1",
+                      href: "/new/1",
                       className: "ml1 no-underline black",
                       children: "top"
                     }), React.createElement("div", {
