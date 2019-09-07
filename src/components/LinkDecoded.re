@@ -16,6 +16,7 @@ type link = {
   votes: array(vote),
   postedBy: option(postedBy),
 };
+
 let decodeUser = (json) =>
   Json.Decode.{id: json |> field("id", string)};
 let decodePostedBy = (json) =>
@@ -40,4 +41,10 @@ let decodeLink = (json): link => {
   };
 };
 let decodeLinks = json => Json.Decode.array(decodeLink, json);
+
+let decodeLinksJson = json => Json.Decode.array(decodeLink, json);
 let decodeLinks = (json) =>json->Js.Json.stringifyAny->Belt.Option.getExn->Js.Json.parseExn->decodeLinks
+let decodeLinksJson = (json) => json->decodeLinksJson;
+// =>json->Js.Json.stringifyAny->Belt.Option.getExn->Js.Json.parseExn->decodeLinks
+
+let decodeFeed = (json) => Json.Decode.at(["feed","links"],Json.Decode.array(decodeLink),json);

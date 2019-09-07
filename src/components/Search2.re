@@ -31,7 +31,7 @@ let make = () => {
   // let (links, setLinks) = React.useState(() => [||]);
   let request = FEED_SEARCH_QUERY.make(~filter, ());
   let (result, executeQuery) = useQuery(~request,~requestPolicy=`NetworkOnly, ~pause=true, ());
-  let search = React.useCallback(() => executeQuery, executeQuery |> ignore);
+  // let search = React.useCallback(() => executeQuery, executeQuery |> ignore);
   let refetch = React.useCallback(() => executeQuery(None));
   // let search = () => {
   //   executeQuery |> ignore;

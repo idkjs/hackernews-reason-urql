@@ -56,12 +56,30 @@ function decodeLinks(json) {
   return Json_decode.array(decodeLink, json$1);
 }
 
+function decodeLinksJson(json) {
+  return Json_decode.array(decodeLink, json);
+}
+
+function decodeFeed(json) {
+  return Json_decode.at(/* :: */Caml_chrome_debugger.simpleVariant("::", [
+                  "feed",
+                  /* :: */Caml_chrome_debugger.simpleVariant("::", [
+                      "links",
+                      /* [] */0
+                    ])
+                ]), (function (param) {
+                  return Json_decode.array(decodeLink, param);
+                }))(json);
+}
+
 export {
   decodeUser ,
   decodePostedBy ,
   decodeVotes ,
   decodeLink ,
   decodeLinks ,
+  decodeLinksJson ,
+  decodeFeed ,
   
 }
 /* No side effect */

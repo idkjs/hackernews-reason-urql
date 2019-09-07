@@ -1,3 +1,4 @@
+external jsFromJSON : Js.Json.t => Js.t({. }) = "%identity";
 include Belt;
 
 let noop = () => ();

@@ -1,8 +1,7 @@
 open ReasonUrql;
 open Hooks;
 
-module FEED_QUERY = [%graphql
-  {|
+let feedQuery = {|
     query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
     feed(first: $first, skip: $skip, orderBy: $orderBy) {
       count
@@ -21,15 +20,13 @@ module FEED_QUERY = [%graphql
             id
           }
         }
-
       }
     }}
-|}
-];
-
+|};
 [@react.component]
 let make = (~path=ReasonReactRouter.useUrl().path) => {
- 
+  // Set the `ReasonReactRouter`'s `path` list to a variable.
+  // let path = ReasonReactRouter.useUrl().path;
   Js.log2("path", path);
 
   // Get the first string in the list and check if it exists with `Belt.List.head`
@@ -38,49 +35,44 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
 
   let pageWithArg = list => list->List.nth(1)->int_of_string;
   let isNewPage = path->Belt.List.has("new", (===)) == true;
-  isNewPage ? Js.log2("page-var", pageWithArg(path)):();
+
   Js.log2("isNewPage", isNewPage);
 
-  let skip = isNewPage ? (pageWithArg(path) - 1) * 10 : 0;
+  let skip = (isNewPage ? (pageWithArg(path) - 1) * 10 : 0)->float_of_int;
+
   Js.log2("skip", skip);
-  Js.log2("page-var", skip);
 
-  let first = isNewPage ? 10 : 100;
+  let first = (isNewPage ? 10 : 100)->float_of_int;
   Js.log2("first", first);
-
-  let orderBy = isNewPage ? `createdAt_DESC : `createdAt_DESC;
+  let orderBy = isNewPage ? "createdAt_DESC" : "";
   Js.log2("orderBy", orderBy);
-
-  let firstPL = (isNewPage ? 10 : 100)->float_of_int;
-  Js.log2("firstPL", firstPL);
-
-  let skipPL = (isNewPage ? (pageWithArg(path) - 1) * 10 : 0)->float_of_int;
-  Js.log2("skipPL", skipPL);
-
-  let orderByPL = isNewPage ? "createdAt_DESC" : "";
-  Js.log2("orderByPL", orderByPL);
   let payload =
     React.useMemo1(
       () => {
         let variables = Js.Dict.empty();
-        Js.Dict.set(variables, "skip", Js.Json.number(skipPL));
-        Js.Dict.set(variables, "first", Js.Json.number(firstPL));
-        Js.Dict.set(variables, "orderBy", Js.Json.string(orderByPL));
+        Js.Dict.set(variables, "skip", Js.Json.number(skip));
+        Js.Dict.set(variables, "first", Js.Json.number(first));
+        Js.Dict.set(variables, "orderBy", Js.Json.string(orderBy));
         Js.Json.object_(variables);
       },
       [|path|],
     );
   Js.log2("payload", payload);
+  Js.log2("feedQuery", feedQuery);
 
-  let request = FEED_QUERY.make(~skip, ~first, ~orderBy, ());
-
-  let ({response}, _) = useQuery(~request, ());
+  let ({response}, _) =
+    useQuery(
+      ~request={"query": feedQuery, "variables": payload, "parse": x => x},
+      (),
+    );
   switch (response) {
   | Data(data) =>
     Js.log2("DATA", data);
-    let linksToRender = data##feed##links->LinkDecoded.decodeLinks;
+
+    let links = LinkDecoded.decodeFeed(data);
+    Js.log2("LINKS", links);
     let links =
-      linksToRender->Belt.Array.mapWithIndex((index, link) =>
+      links->Belt.Array.mapWithIndex((index, link) =>
         <Link key={link.id} link index />
       );
     <div> {links |> React.array} </div>;

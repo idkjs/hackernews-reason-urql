@@ -1,5 +1,6 @@
 {
-  "name": "reason-scripts",
+  "name": "reason-hn",
+  "namespace": true,
   "sources": [
     {
       "dir": "src",

@@ -11,25 +11,16 @@ module Link = {
 
 [@react.component]
 let make = () => {
-  // let (isLoggedIn, _setIsLoggedIn) = React.useState(()=> Token.isLoggedIn())
-  // Js.log2(
-  //   "TOKEN:",
-  //   Token.getToken()->Belt.Option.getWithDefault("NO_TOKEN"),
-  // );
-  // Js.log2("isLoggedIn_PassedIn:", isLoggedIn);
   let isLoggedIn = Token.isLoggedIn();
-  // let isLoggedIn =
-  //   switch (Token.getToken()) {
-  //   | Some(_token) => true
-  //   | None => false
-  //   };
+
   <div className="flex pa1 justify-between nowrap orange">
     <div className="flex flex-fixed black">
       <div className="fw7 mr1"> "Reason Hacker News"->React.string </div>
       <Link href="/" className="ml1 no-underline black">
         "new"->React.string
       </Link>
-      <Link href="top" className="ml1 no-underline black">
+      <div className="ml1"> "|"->React.string </div>
+      <Link href="new/1" className="ml1 no-underline black">
         "top"->React.string
       </Link>
       <div className="ml1"> "|"->React.string </div>
@@ -45,7 +36,6 @@ let make = () => {
            </div>
          : React.null}
     </div>
-    
     <div className="flex flex-fixed">
       {isLoggedIn
          ? <div
