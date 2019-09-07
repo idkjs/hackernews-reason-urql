@@ -10,7 +10,9 @@ let make = () => {
   let nowShowing =
     switch (url.path) {
     |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkList />
-    |["new",_] => <LinkList />
+    |["new",id] => Js.log2(
+    "id",
+     id );  <LinkList />
     // |["new",_] => <LinkListNew />
     | ["create"] => <CreateLink />
     | ["signup"] => <SignUp />

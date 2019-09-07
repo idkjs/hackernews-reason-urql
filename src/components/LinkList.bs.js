@@ -6,13 +6,16 @@ import * as React from "react";
 import * as Js_exn from "bs-platform/lib/es6/js_exn.js";
 import * as Js_dict from "bs-platform/lib/es6/js_dict.js";
 import * as Js_json from "bs-platform/lib/es6/js_json.js";
+import * as Belt_Int from "bs-platform/lib/es6/belt_Int.js";
 import * as Belt_List from "bs-platform/lib/es6/belt_List.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Caml_int32 from "bs-platform/lib/es6/caml_int32.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
+import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as Caml_format from "bs-platform/lib/es6/caml_format.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Link$ReasonHn from "./Link.bs.js";
+import * as Utils$ReasonHn from "../Utils.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 import * as LinkDecoded$ReasonHn from "./LinkDecoded.bs.js";
@@ -300,6 +303,36 @@ function LinkList(Props) {
   var match = Props.path;
   var path = match !== undefined ? match : ReasonReactRouter.useUrl(undefined, /* () */0)[/* path */0];
   console.log("path", path);
+  var page = Belt_List.tail(path);
+  Utils$ReasonHn.inspect2(page, "page_tail");
+  var page$1 = Belt_Option.getExn(page);
+  var page2;
+  if (page$1) {
+    var match$1 = page$1[1];
+    page2 = match$1 ? Caml_format.caml_int_of_string(match$1[0]) : 0;
+  } else {
+    page2 = 0;
+  }
+  Utils$ReasonHn.inspect2(page2, "page2_page_switch");
+  Utils$ReasonHn.inspect2(page$1, "page_getExn");
+  var page$2 = Belt_Int.fromString(List.nth(page$1, 0));
+  Utils$ReasonHn.inspect2(page$2, "page_fromString");
+  var page$3;
+  if (path) {
+    var match$2 = path[1];
+    page$3 = match$2 ? Caml_format.caml_int_of_string(match$2[0]) : 0;
+  } else {
+    page$3 = 0;
+  }
+  Utils$ReasonHn.inspect2(page$3, "page_path_switch");
+  var page$4;
+  if (path && path[0] === "new") {
+    var match$3 = path[1];
+    page$4 = match$3 ? Caml_format.caml_int_of_string(match$3[0]) : 0;
+  } else {
+    page$4 = 0;
+  }
+  Utils$ReasonHn.inspect2(page$4, "isNew_page_path_switch");
   var isNewPage = Belt_List.has(path, "new", (function (prim, prim$1) {
           return prim === prim$1;
         })) === true;
@@ -307,15 +340,14 @@ function LinkList(Props) {
     console.log("page-var", Caml_format.caml_int_of_string(List.nth(path, 1)));
   }
   console.log("isNewPage", isNewPage);
-  var skip = isNewPage ? Caml_int32.imul(Caml_format.caml_int_of_string(List.nth(path, 1)) - 1 | 0, 10) : 0;
+  var skip = Caml_int32.imul(page$4 - 1 | 0, 10);
   console.log("skip", skip);
-  console.log("page-var", skip);
-  var first = isNewPage ? 10 : 100;
-  console.log("first", first);
+  console.log("first", 10);
   console.log("orderBy", /* createdAt_DESC */550411093);
-  var request = make(first, skip, /* createdAt_DESC */550411093, /* () */0);
-  var match$1 = Curry._4(ReasonUrql.Hooks[/* useQuery */1], request, undefined, undefined, /* () */0);
-  var response = match$1[0][/* response */3];
+  var request = make(10, skip, /* createdAt_DESC */550411093, /* () */0);
+  console.log("request", request);
+  var match$4 = Curry._4(ReasonUrql.Hooks[/* useQuery */1], request, undefined, undefined, /* () */0);
+  var response = match$4[0][/* response */3];
   if (typeof response === "number") {
     if (response === 0) {
       return React.createElement("div", undefined, "Loading");
@@ -323,8 +355,8 @@ function LinkList(Props) {
       return React.createElement("div", undefined, "Not Found");
     }
   } else if (response.tag) {
-    var match$2 = response[0][/* networkError */0];
-    if (match$2 !== undefined) {
+    var match$5 = response[0][/* networkError */0];
+    if (match$5 !== undefined) {
       return React.createElement("div", undefined, "Network Error");
     } else {
       return React.createElement("div", undefined, "No Network Error");

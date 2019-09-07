@@ -33,7 +33,12 @@ function App(Props) {
           break;
       case "new" : 
           var match$1 = match[1];
-          nowShowing = match$1 && !match$1[1] ? React.createElement(LinkList$ReasonHn.make, { }) : "NotFound";
+          if (match$1 && !match$1[1]) {
+            console.log("id", match$1[0]);
+            nowShowing = React.createElement(LinkList$ReasonHn.make, { });
+          } else {
+            nowShowing = "NotFound";
+          }
           break;
       case "search" : 
           nowShowing = match[1] ? "NotFound" : React.createElement(Search$ReasonHn.make, { });
