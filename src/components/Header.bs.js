@@ -53,9 +53,15 @@ function Header(Props) {
                     }), React.createElement("div", {
                       className: "ml1"
                     }, "|"), React.createElement(Header$Link, {
-                      href: "search",
+                      href: "/search",
                       className: "ml1 no-underline black",
                       children: "search"
+                    }), React.createElement("div", {
+                      className: "ml1"
+                    }, "|"), React.createElement(Header$Link, {
+                      href: "/tweets",
+                      className: "ml1 no-underline black",
+                      children: "sorting"
                     }), isLoggedIn ? React.createElement("div", {
                         className: "flex"
                       }, React.createElement("div", {

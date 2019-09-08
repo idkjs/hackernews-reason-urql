@@ -15,11 +15,13 @@ let make = () => {
     | ["new", id] =>
       Js.log2("id", id);
       <LinkList />;
-    | ["top"] => <LinkList />
+    | ["top"] => <TopList />
+    // | ["top"] => <LinkList />
     | ["create"] => <CreateLink />
     | ["signup"] => <SignUp />
     | ["login"] => <Login />
     | ["search"] => <Search />
+    | ["tweets"] => <TweetSorting />
     | _ => "NotFound"->React.string
     };
   ();

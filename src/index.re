@@ -42,7 +42,31 @@ let headerContextLink = {
   Client.FetchOpts(fetchOptions);
 };
 
-let cache = GraphCache.cacheExchange();
+let config = [%raw {|
+  {
+  updates: {
+    Mutation: {
+      post: ({ post }, _args, cache) => {
+        const variables = { first: 10, skip: 0, orderBy: 'createdAt_DESC' }
+        cache.updateQuery({ query: FEED_QUERY, variables }, data => {
+          if (data !== null) {
+            data.feed.links.unshift(post)
+            data.feed.count++
+            return data
+          } else {
+            return null
+          }
+        })
+      }
+    }
+  }
+}
+|}];
+Js.log2(
+"config",
+ config );
+// let cache = GraphCache.cacheExchange();
+let cache = GraphCache.cacheExchange(config);
 let client =
   Client.make(
     ~url="http://localhost:4000",

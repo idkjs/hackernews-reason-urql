@@ -79,27 +79,6 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
       | Data(data) =>
         let links = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
 
-        // let sorted = (~links) => links->sortLinks(Desc);
-        // let _ =
-        //   links->Belt.Array.mapWithIndex((idx, link) =>
-        //     Js.log4(
-        //       "vote index",
-        //       idx,
-        //       "vote length",
-        //       Belt.Array.length(link.votes),
-        //     )
-        //   );
-        // let _ =
-        //   links->Belt.Array.map(link =>
-        //     Js.log2(
-        //       "vote length",
-        //       Belt.Array.length(link.votes),
-        //     )
-        //   );
-        // let _ = Js.log2("vote length", rankedLinks);
-        // rankedLinks |> ignore;
-        // let rankedLinks = Sorting.sortLinks(~links, Desc)->Belt.List.toArray;
-        // Js.log2("isTop", isTop);
         let links = !isTop ? links : linksToRender;
 
         // let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;

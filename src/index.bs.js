@@ -55,6 +55,29 @@ var fetchOptions = Fetch.RequestInit[/* make */0](/* Post */2, Caml_option.some(
 
 var headerContextLink = /* FetchOpts */Caml_chrome_debugger.variant("FetchOpts", 0, [fetchOptions]);
 
+var config = (
+  {
+  updates: {
+    Mutation: {
+      post: ({ post }, _args, cache) => {
+        const variables = { first: 10, skip: 0, orderBy: 'createdAt_DESC' }
+        cache.updateQuery({ query: FEED_QUERY, variables }, data => {
+          if (data !== null) {
+            data.feed.links.unshift(post)
+            data.feed.count++
+            return data
+          } else {
+            return null
+          }
+        })
+      }
+    }
+  }
+}
+);
+
+console.log("config", config);
+
 function cache(param) {
   return CacheExchange.cacheExchange(param);
 }
@@ -78,6 +101,7 @@ export {
   unregister_service_worker ,
   debugExchange ,
   headerContextLink ,
+  config ,
   cache ,
   client ,
   

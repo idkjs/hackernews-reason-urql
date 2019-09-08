@@ -5,9 +5,11 @@ import * as Login$ReasonHn from "./Login.bs.js";
 import * as Header$ReasonHn from "./Header.bs.js";
 import * as Search$ReasonHn from "./Search.bs.js";
 import * as SignUp$ReasonHn from "./SignUp.bs.js";
+import * as TopList$ReasonHn from "./TopList.bs.js";
 import * as LinkList$ReasonHn from "./LinkList.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as CreateLink$ReasonHn from "./CreateLink.bs.js";
+import * as TweetSorting$ReasonHn from "../Tweets/TweetSorting.bs.js";
 
 ((require('../styles/App.css')));
 
@@ -47,7 +49,10 @@ function App(Props) {
           nowShowing = match[1] ? "NotFound" : React.createElement(SignUp$ReasonHn.make, { });
           break;
       case "top" : 
-          nowShowing = match[1] ? "NotFound" : React.createElement(LinkList$ReasonHn.make, { });
+          nowShowing = match[1] ? "NotFound" : React.createElement(TopList$ReasonHn.make, { });
+          break;
+      case "tweets" : 
+          nowShowing = match[1] ? "NotFound" : React.createElement(TweetSorting$ReasonHn.make, { });
           break;
       default:
         nowShowing = "NotFound";
