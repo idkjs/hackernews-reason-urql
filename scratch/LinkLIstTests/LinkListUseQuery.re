@@ -1,13 +1,38 @@
 open ReasonUrql;
 open Hooks;
 
+module FEED_QUERY = [%graphql
+  {|
+    query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
+    feed(first: $first, skip: $skip, orderBy: $orderBy) {
+      count
+      links {
+        id
+        createdAt
+        url
+        description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
+    }}
+|}
+];
+
 [@react.component]
 let make = (~path=ReasonReactRouter.useUrl().path) => {
   let (count, setCount) = React.useState(() => 0);
   let (links, setLinks) = React.useState(() => [||]);
-  // Js.log2("path", path);
 
   // since we know there is always a variable for the page # because of App.re routers redirect, we can do this.
+
   let page =
     switch (path) {
     | ["new", x, ..._] => int_of_string(x)
@@ -23,9 +48,22 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
 
   let orderBy = `createdAt_DESC;
 
-  let request = Queries.FEED_QUERY.make(~skip, ~first, ~orderBy, ());
+  let linkList =
+    Belt.Array.mapWithIndex(links, (index, link) =>
+      <LinkJst
+        key={
+          link##id;
+        }
+        link
+        index={pageIndex + index}
+      />
+    )
+    ->React.array;
+  let feedQuery = FEED_QUERY.make(~skip, ~first, ~orderBy, ());
+  let variables = feedQuery##variables;
+  let query = feedQuery##query;
+  let request = {"query": query, "variables": variables, "parse": x => x};
   let ({response}, _) = useQuery(~request, ());
-
   let nextPage =
     React.useCallback1(
       () =>
@@ -40,6 +78,7 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
           },
       [|count, page|],
     );
+
   let previousPage =
     React.useCallback1(
       () =>
@@ -49,32 +88,9 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
         },
       [|page|],
     );
-
-  let linkList =
-    links->Belt.Array.mapWithIndex((index, link) =>
-      <Link key={link.id} link index={pageIndex + index} />
-    );
-
-  React.useEffect1(
-    () => {
-      switch (response) {
-      | Fetching => ()
-      | NotFound => ()
-      | Error(_e) => ()
-      | Data(data) =>
-        let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
-        let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
-        setLinks(_ => linksToRender);
-        let count = data##feed##count;
-        setCount(_ => count);
-      };
-
-      None;
-    },
-    [|response|] // Here we are listing dependency on which component will be re-rendered.
-  );
-  <>
-      <div> linkList->React.array </div>
+  let renderUi = () => {
+    <>
+      <div> linkList </div>
       <div className="flex ml4 mv3 gray">
         <div className="pointer mr2" onClick={_ => previousPage()}>
           "Previous"->React.string
@@ -84,4 +100,24 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
         </div>
       </div>
     </>;
+  };
+  React.useEffect1(
+    () => {
+      switch (response) {
+      | Fetching => ()
+      | NotFound => ()
+      | Error(_e) => ()
+      | Data(data) =>
+        let data = data->Utils.jsFromJSON;
+        let links = data##feed##links;
+        let count = data##feed##count;
+        setCount(_ => count);
+        setLinks(_ => links);
+      };
+
+      None;
+    },
+    [|response|] // Here we are listing dependency on which component will be re-rendered.
+  );
+  renderUi();
 };

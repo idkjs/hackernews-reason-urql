@@ -71,7 +71,7 @@ let pageWithArg = list => list->List.nth(1)->Utils.parseInt;
   | Data(data) =>
     Js.log2("DATA", data);
 
-    let links = LinkDecoded.decodeFeed(data);
+    let links = LinkDecoded.decodeLinksJsonT(data);
     Js.log2("LINKS", links);
     let links =
       links->Belt.Array.mapWithIndex((index, link) =>

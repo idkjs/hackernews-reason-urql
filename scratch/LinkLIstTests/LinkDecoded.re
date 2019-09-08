@@ -16,15 +16,17 @@ type link = {
   votes: array(vote),
   postedBy: option(postedBy),
 };
-
-let decodeUser = (json) =>
-  Json.Decode.{id: json |> field("id", string)};
-let decodePostedBy = (json) =>
+type feed = {
+  links: array(link),
+  count: int,
+};
+let decodeUser = json => Json.Decode.{id: json |> field("id", string)};
+let decodePostedBy = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
   };
-let decodeVotes = (json) => {
+let decodeVotes = json => {
   Json.Decode.{
     id: json |> field("id", string),
     user: json |> field("user", decodeUser),
@@ -43,8 +45,42 @@ let decodeLink = (json): link => {
 let decodeLinks = json => Json.Decode.array(decodeLink, json);
 
 let decodeLinksJson = json => Json.Decode.array(decodeLink, json);
-let decodeLinks = (json) =>json->Js.Json.stringifyAny->Belt.Option.getExn->Js.Json.parseExn->decodeLinks
-let decodeLinksJson = (json) => json->decodeLinksJson;
+let decodeLinks = json =>
+  json
+  ->Js.Json.stringifyAny
+  ->Belt.Option.getExn
+  ->Js.Json.parseExn
+  ->decodeLinks;
+let decodeLinksJson = json => json->decodeLinksJson;
 // =>json->Js.Json.stringifyAny->Belt.Option.getExn->Js.Json.parseExn->decodeLinks
+let decodeFeed = json => {
+  Json.Decode.{
+    links: json |> field("links", array(decodeLink)),
+    count: json |> field("count", int),
+  };
+};
 
-let decodeFeed = (json) => Json.Decode.at(["feed","links"],Json.Decode.array(decodeLink),json);
+let feedToJs =
+  json =>
+    json
+    ->Js.Json.stringifyAny
+    ->Belt.Option.getExn
+    ->Js.Json.parseExn
+    ->decodeFeed;
+
+let decodeLinksJsonT = json =>
+  Json.Decode.at(["feed", "links"], Json.Decode.array(decodeLink), json);
+
+let decodeCount = json =>
+  Json.Decode.at(["feed", "count"], Json.Decode.int, json);
+
+module Feed = {
+  let decodeFeed = json => {
+    Json.Decode.{
+      links: json |> field("links", array(decodeLink)),
+      count: json |> field("count", int),
+    };
+  };
+
+  let decode = json => json->decodeFeed;
+};

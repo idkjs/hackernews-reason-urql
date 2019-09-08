@@ -8,7 +8,7 @@ import * as Name$BsFaker from "bs-faker/src/Name.bs.js";
 import * as Token$ReasonHn from "../Token.bs.js";
 import * as Internet$BsFaker from "bs-faker/src/Internet.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
-import * as Mutations$ReasonHn from "../Mutations.bs.js";
+import * as Mutations$ReasonHn from "../graphql/Mutations.bs.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
 function reducer(state, action) {

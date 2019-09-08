@@ -41,7 +41,7 @@ let make = () => {
     | Some(data) => data##feed##links
     | None => [||]
     };
-  let linksToRender = LinkDecoded.decodeLinks(links);
+  let linksToRender = ReasonHn.Types.Feed.decodeLinks(links);
 
   let links =
     linksToRender->Belt.Array.mapWithIndex((index, link) =>

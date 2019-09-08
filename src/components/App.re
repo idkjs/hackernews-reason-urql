@@ -9,7 +9,15 @@ let make = () => {
 
   let nowShowing =
     switch (url.path) {
+    // |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkListInfinit />
+    // |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkListUseQuery />
     |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkList />
+    // |["new",id] => Js.log2(
+    // "id",
+    //  id );  <LinkListUseQuery />
+    // |["new",id] => Js.log2(
+    // "id",
+    //  id );  <LinkListInfinit />
     |["new",id] => Js.log2(
     "id",
      id );  <LinkList />

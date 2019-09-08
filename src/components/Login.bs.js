@@ -6,7 +6,7 @@ import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as Token$ReasonHn from "../Token.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
-import * as Mutations$ReasonHn from "../Mutations.bs.js";
+import * as Mutations$ReasonHn from "../graphql/Mutations.bs.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
 function reducer(state, action) {
