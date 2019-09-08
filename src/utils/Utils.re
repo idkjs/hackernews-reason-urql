@@ -12,6 +12,7 @@ let noop1 = _ => ();
 let noop2 = (_, _) => ();
 let noop3 = (_, _, _) => ();
 
+let flip = (f, a, b) => f(b,a);
 let doThenReturn = (a, f) => {
   f(a);
   a;

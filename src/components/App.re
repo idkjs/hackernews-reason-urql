@@ -1,4 +1,3 @@
-
 // [%%debugger.chrome];
 // [@bs.module] external css: Js.t({..}) as 'a = "../styles/App.module.css";
 [%bs.raw {|require('../styles/App.css')|}];
@@ -9,19 +8,14 @@ let make = () => {
 
   let nowShowing =
     switch (url.path) {
-    // |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkListInfinit />
-    // |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkListUseQuery />
-    |[]|["/"] => ReasonReact.Router.replace("new/1");<LinkList />
-    // |["new",id] => Js.log2(
-    // "id",
-    //  id );  <LinkListUseQuery />
-    // |["new",id] => Js.log2(
-    // "id",
-    //  id );  <LinkListInfinit />
-    |["new",id] => Js.log2(
-    "id",
-     id );  <LinkList />
-    // |["new",_] => <LinkListNew />
+    | []
+    | ["/"] =>
+      ReasonReact.Router.replace("new/1");
+      <LinkList />;
+    | ["new", id] =>
+      Js.log2("id", id);
+      <LinkList />;
+    | ["top"] => <LinkList />
     | ["create"] => <CreateLink />
     | ["signup"] => <SignUp />
     | ["login"] => <Login />

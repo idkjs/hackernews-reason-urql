@@ -26,6 +26,10 @@ function noop3(param, param$1, param$2) {
   return /* () */0;
 }
 
+function flip(f, a, b) {
+  return Curry._2(f, b, a);
+}
+
 function doThenReturn(a, f) {
   Curry._1(f, a);
   return a;
@@ -48,7 +52,7 @@ function none(f) {
 
 var OptionUtils = /* module */Caml_chrome_debugger.localModule(["none"], [none]);
 
-function flip(f, a, b) {
+function flip$1(f, a, b) {
   return Curry._2(f, b, a);
 }
 
@@ -60,7 +64,7 @@ var FunctionUtils = /* module */Caml_chrome_debugger.localModule([
     "flip",
     "flip3"
   ], [
-    flip,
+    flip$1,
     flip3
   ]);
 
@@ -167,6 +171,7 @@ export {
   noop1 ,
   noop2 ,
   noop3 ,
+  flip ,
   doThenReturn ,
   inspect ,
   inspect2 ,

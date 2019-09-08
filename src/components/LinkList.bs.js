@@ -2,6 +2,7 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
+import * as Belt_List from "bs-platform/lib/es6/belt_List.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Caml_int32 from "bs-platform/lib/es6/caml_int32.js";
 import * as ReasonUrql from "reason-urql/src/ReasonUrql.bs.js";
@@ -9,6 +10,7 @@ import * as Caml_format from "bs-platform/lib/es6/caml_format.js";
 import * as Link$ReasonHn from "./Link.bs.js";
 import * as Types$ReasonHn from "../models/Types.bs.js";
 import * as Queries$ReasonHn from "../graphql/Queries.bs.js";
+import * as Sorting$ReasonHn from "../utils/Sorting.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 
 function LinkList(Props) {
@@ -23,6 +25,7 @@ function LinkList(Props) {
           return /* array */[];
         }));
   var setLinks = match$2[1];
+  var links = match$2[0];
   var page;
   if (path && path[0] === "new") {
     var match$3 = path[1];
@@ -30,6 +33,7 @@ function LinkList(Props) {
   } else {
     page = 0;
   }
+  var isTop = path && path[0] === "top" ? true : false;
   var skip = Caml_int32.imul(page - 1 | 0, 10);
   var request = Queries$ReasonHn.FEED_QUERY[/* make */4](10, skip, /* createdAt_DESC */550411093, /* () */0);
   var match$4 = Curry._4(ReasonUrql.Hooks[/* useQuery */1], request, undefined, undefined, /* () */0);
@@ -52,7 +56,16 @@ function LinkList(Props) {
             return 0;
           }
         }), /* array */[page]);
-  var linkList = Belt_Array.mapWithIndex(match$2[0], (function (index, link) {
+  var rankedLinks = Belt_List.toArray(Sorting$ReasonHn.sortLinks(links, /* Desc */1));
+  var linksToRender = React.useMemo((function () {
+          var match = links.length < 1;
+          if (match) {
+            return links;
+          } else {
+            return rankedLinks;
+          }
+        }), /* array */[links]);
+  var linkList = Belt_Array.mapWithIndex(links, (function (index, link) {
           return React.createElement(Link$ReasonHn.make, {
                       link: link,
                       index: skip + index | 0,
@@ -63,10 +76,11 @@ function LinkList(Props) {
           if (typeof response !== "number") {
             if (!response.tag) {
               var data = response[0];
-              Types$ReasonHn.Feed[/* decodeLinks */4](data.feed.links);
-              var linksToRender = Types$ReasonHn.Feed[/* decodeLinks */4](data.feed.links);
+              var links = Types$ReasonHn.Feed[/* decodeLinks */4](data.feed.links);
+              var match = !isTop;
+              var links$1 = match ? links : linksToRender;
               Curry._1(setLinks, (function (param) {
-                      return linksToRender;
+                      return links$1;
                     }));
               var count = data.feed.count;
               Curry._1(setCount, (function (param) {

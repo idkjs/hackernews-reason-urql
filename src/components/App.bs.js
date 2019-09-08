@@ -46,6 +46,9 @@ function App(Props) {
       case "signup" : 
           nowShowing = match[1] ? "NotFound" : React.createElement(SignUp$ReasonHn.make, { });
           break;
+      case "top" : 
+          nowShowing = match[1] ? "NotFound" : React.createElement(LinkList$ReasonHn.make, { });
+          break;
       default:
         nowShowing = "NotFound";
     }

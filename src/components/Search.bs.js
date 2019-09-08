@@ -11,6 +11,7 @@ import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Link$ReasonHn from "./Link.bs.js";
 import * as Types$ReasonHn from "../models/Types.bs.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
+import * as TweetSorting$ReasonHn from "../Tweets/TweetSorting.bs.js";
 
 var ppx_printed_query = "query FeedSearchQuery($filter: String!)  {\nfeed(filter: $filter)  {\nlinks  {\nid  \nurl  \ndescription  \ncreatedAt  \npostedBy  {\nid  \nname  \n}\n\nvotes  {\nid  \nuser  {\nid  \n}\n\n}\n\n}\n\n}\n\n}\n";
 
@@ -272,7 +273,7 @@ function Search(Props) {
                       onClick: (function (param) {
                           return /* () */0;
                         })
-                    }, "search")), React.createElement("div", undefined, match$1[0]));
+                    }, "search")), React.createElement(TweetSorting$ReasonHn.make, { }), React.createElement("div", undefined, match$1[0]));
 }
 
 var make$1 = Search;

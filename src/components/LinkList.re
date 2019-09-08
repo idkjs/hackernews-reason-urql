@@ -14,7 +14,11 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
     | _ => 0
     };
   // let _ = Utils.inspect2(page, "isNew_page_path_switch");
-
+  let isTop =
+    switch (path) {
+    | ["top", ..._] => true
+    | _ => false
+    };
   let skip = (page - 1) * 10;
 
   let pageIndex = skip;
@@ -49,11 +53,22 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
         },
       [|page|],
     );
+  let rankedLinks = Sorting.sortLinks(~links, Desc)->Belt.List.toArray;
 
+  let linksToRender =
+    React.useMemo1(
+      () => Array.length(links) < 1 ? links : rankedLinks,
+      [|links|],
+    );
   let linkList =
     links->Belt.Array.mapWithIndex((index, link) =>
       <Link key={link.id} link index={pageIndex + index} />
     );
+
+  // let linksToRender = React.useMemo1(
+  //       () => Array.length(links) < 1 ? () :
+  //     rankedLinks
+  //   }, [links]);
 
   React.useEffect1(
     () => {
@@ -62,9 +77,34 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
       | NotFound => ()
       | Error(_e) => ()
       | Data(data) =>
-        let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
-        let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
-        setLinks(_ => linksToRender);
+        let links = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
+
+        // let sorted = (~links) => links->sortLinks(Desc);
+        // let _ =
+        //   links->Belt.Array.mapWithIndex((idx, link) =>
+        //     Js.log4(
+        //       "vote index",
+        //       idx,
+        //       "vote length",
+        //       Belt.Array.length(link.votes),
+        //     )
+        //   );
+        // let _ =
+        //   links->Belt.Array.map(link =>
+        //     Js.log2(
+        //       "vote length",
+        //       Belt.Array.length(link.votes),
+        //     )
+        //   );
+        // let _ = Js.log2("vote length", rankedLinks);
+        // rankedLinks |> ignore;
+        // let rankedLinks = Sorting.sortLinks(~links, Desc)->Belt.List.toArray;
+        // Js.log2("isTop", isTop);
+        let links = !isTop ? links : linksToRender;
+
+        // let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
+        // let linksToRender = data##feed##links->ReasonHn.Types.Feed.decodeLinks;
+        setLinks(_ => links);
         let count = data##feed##count;
         setCount(_ => count);
       };
@@ -74,14 +114,14 @@ let make = (~path=ReasonReactRouter.useUrl().path) => {
     [|response|] // Here we are listing dependency on which component will be re-rendered.
   );
   <>
-      <div> linkList->React.array </div>
-      <div className="flex ml4 mv3 gray">
-        <div className="pointer mr2" onClick={_ => previousPage()}>
-          "Previous"->React.string
-        </div>
-        <div className="pointer" onClick={_ => nextPage()}>
-          "Next"->React.string
-        </div>
+    <div> linkList->React.array </div>
+    <div className="flex ml4 mv3 gray">
+      <div className="pointer mr2" onClick={_ => previousPage()}>
+        "Previous"->React.string
       </div>
-    </>;
+      <div className="pointer" onClick={_ => nextPage()}>
+        "Next"->React.string
+      </div>
+    </div>
+  </>;
 };

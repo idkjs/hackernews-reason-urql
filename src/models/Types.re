@@ -70,5 +70,4 @@ let decodeLinks = json =>
     ->Belt.Option.getExn
     ->Js.Json.parseExn
     ->decodeData;
-  // let decode = json => json->feedToJs;
 };

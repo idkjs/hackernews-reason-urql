@@ -72,6 +72,7 @@ let make = () => {
       />
       <button onClick={_ => search()}> "search"->React.string </button>
     </div>
+    <TweetSorting />
     <div> {links |> React.array} </div>
   </div>;
 };
