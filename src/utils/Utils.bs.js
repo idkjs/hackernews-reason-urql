@@ -6,10 +6,6 @@ import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Caml_js_exceptions from "bs-platform/lib/es6/caml_js_exceptions.js";
 import * as Caml_chrome_debugger from "bs-platform/lib/es6/caml_chrome_debugger.js";
 
-function $$parseInt$1(string) {
-  return parseInt(string, 10);
-}
-
 function noop(param) {
   return /* () */0;
 }
@@ -148,7 +144,6 @@ var Float = Belt.Float;
 var Debug = Belt.Debug;
 
 export {
-  $$parseInt$1 as $$parseInt,
   Id ,
   $$Array ,
   SortArray ,

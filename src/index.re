@@ -8,6 +8,7 @@ external unregister_service_worker: unit => unit = "unregister";
 open ReasonUrql;
 open UrqlDevtools;
 open Fetch;
+open SubscriptionsTransportWS;
 ReasonReactRouter.push("");
 
 // open Client;
@@ -42,7 +43,8 @@ let headerContextLink = {
   Client.FetchOpts(fetchOptions);
 };
 
-let config = [%raw {|
+let config = [%raw
+  {|
   {
   updates: {
     Mutation: {
@@ -61,22 +63,47 @@ let config = [%raw {|
     }
   }
 }
-|}];
-Js.log2(
-"config",
- config );
+|}
+];
+Js.log2("config", config);
+let authToken = Token.getToken()->Belt.Option.getWithDefault("");
+// let params = SubscriptionsTransportWS.connectionParams(~authToken=authToken);
 // let cache = GraphCache.cacheExchange();
 let cache = GraphCache.cacheExchange(config);
+// let connectParams=connectionParamsSet(~authToken=tokenWS);
+let options: subscriptionClientOptions =
+  subscriptionClientOptions(
+    ~reconnect=true,
+    ~connectionParams={"authToken": authToken},
+    (),
+  );
+let client =
+  subscriptionClient(
+    ~url="ws://localhost:4001/graphql",
+    ~subscriptionClientConfig=subscriptionClientConfig(~options,()),
+  );
+
+let forwardSubscription = operation => client##request(operation);
+
+let subscriptionExchangeOpts =
+  Exchanges.subscriptionExchangeOpts(~forwardSubscription);
+
+let subscriptionExchange =
+  Exchanges.subscriptionExchange(subscriptionExchangeOpts);
 let client =
   Client.make(
     ~url="http://localhost:4000",
     ~fetchOptions=headerContextLink,
-    ~exchanges=[|
-      debugExchange,
-      cache(~opts=None),
-      devtoolsExchange,
-      Exchanges.fetchExchange,
-    |],
+    ~exchanges=
+      Array.append(
+        [|
+          debugExchange,
+          cache(~opts=None),
+          devtoolsExchange,
+          Exchanges.fetchExchange,
+        |],
+        [|subscriptionExchange|],
+      ),
     (),
   );
 ReactDOMRe.renderToElementWithId(

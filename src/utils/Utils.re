@@ -1,10 +1,5 @@
-// external jsFromJSON : Js.Json.t => Js.t({. }) = "%identity";
 external jsFromJSON : Js.Json.t => Js.t('a) = "%identity";
 
-[@bs.val] external parseInt_ : (string, int) => int = "parseInt";
-
-/** parseInt with an assumed radix of 10 */
-let parseInt = (string) => parseInt_(string, 10);
 include Belt;
 
 let noop = () => ();

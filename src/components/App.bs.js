@@ -6,9 +6,9 @@ import * as Header$ReasonHn from "./Header.bs.js";
 import * as Search$ReasonHn from "./Search.bs.js";
 import * as SignUp$ReasonHn from "./SignUp.bs.js";
 import * as TopList$ReasonHn from "./TopList.bs.js";
-import * as LinkList$ReasonHn from "./LinkList.bs.js";
 import * as ReasonReactRouter from "reason-react/src/ReasonReactRouter.js";
 import * as CreateLink$ReasonHn from "./CreateLink.bs.js";
+import * as LinkListJst$ReasonHn from "./LinkListJst.bs.js";
 import * as TweetSorting$ReasonHn from "../Tweets/TweetSorting.bs.js";
 
 ((require('../styles/App.css')));
@@ -37,7 +37,7 @@ function App(Props) {
           var match$1 = match[1];
           if (match$1 && !match$1[1]) {
             console.log("id", match$1[0]);
-            nowShowing = React.createElement(LinkList$ReasonHn.make, { });
+            nowShowing = React.createElement(LinkListJst$ReasonHn.make, { });
           } else {
             nowShowing = "NotFound";
           }
@@ -62,7 +62,7 @@ function App(Props) {
   }
   if (exit === 1) {
     ReasonReactRouter.replace("new/1");
-    nowShowing = React.createElement(LinkList$ReasonHn.make, { });
+    nowShowing = React.createElement(LinkListJst$ReasonHn.make, { });
   }
   return React.createElement("div", {
               className: "center w85"

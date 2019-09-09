@@ -11,10 +11,17 @@ let make = () => {
     | []
     | ["/"] =>
       ReasonReact.Router.replace("new/1");
-      <LinkList />;
+      <LinkListJst />;
     | ["new", id] =>
       Js.log2("id", id);
-      <LinkList />;
+      <LinkListJst />;
+    // | []
+    // | ["/"] =>
+    //   ReasonReact.Router.replace("new/1");
+    //   <LinkList />;
+    // | ["new", id] =>
+    //   Js.log2("id", id);
+    //   <LinkList />;
     | ["top"] => <TopList />
     // | ["top"] => <LinkList />
     | ["create"] => <CreateLink />
